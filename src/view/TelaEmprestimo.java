@@ -10,6 +10,7 @@ import banco.EmprestimoBanco;
 import banco.Sistema;
 import interfaces.Dependente;
 import interfaces.Parente;
+import java.awt.Image;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -26,7 +27,8 @@ import model.Usuario;
  *
  * @author Marcelo Moreira
  */
-public class TelaEmprestimo extends javax.swing.JFrame {
+public class TelaEmprestimo extends javax.swing.JFrame implements Parente, Dependente {
+
     private Parente parent;
     private String modo;
     private ItemBuscaExemplar item;
@@ -34,65 +36,33 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private Usuario usuario;
     private boolean autorizado;
     private ItemBuscaEmprestimo itemEmprestimo;
+
     /**
      * Creates new form TelaEmprestimo
      */
-    public void setAutoridado(boolean auto){
+    public void setAutoridado(boolean auto) {
         autorizado = auto;
         LocalDate hoje = LocalDate.now();
         LocalDate devolucaoEstimada = hoje.plusDays(31);
         String hojeStr = hoje.format(DateTimeFormatter.ISO_DATE);
         String dataDev = devolucaoEstimada.format(DateTimeFormatter.ISO_DATE);
-        if(auto){
+        if (auto) {
             boolean resul = eb.realizarEmprestimo(Integer.parseInt(txtIDExemplar.getText()), Integer.parseInt(txtIDUsuario.getText()), Integer.parseInt(txtIDBibliotecario.getText()), hojeStr, dataDev);
-            if(resul){
-                JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!\nData de devolução: "+devolucaoEstimada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Empréstimo realizado", JOptionPane.INFORMATION_MESSAGE);
+            if (resul) {
+                JOptionPane.showMessageDialog(null, "Empréstimo realizado com sucesso!\nData de devolução: " + devolucaoEstimada.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Empréstimo realizado", JOptionPane.INFORMATION_MESSAGE);
                 restaurarTela();
-            }else{
-                JOptionPane.showMessageDialog(null, "Erro ao tentar realizar o empréstimo!\n"+hojeStr+dataDev, "Erro ao realizar o procedimento", JOptionPane.ERROR_MESSAGE);
-                
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao tentar realizar o empréstimo!\n" + hojeStr + dataDev, "Erro ao realizar o procedimento", JOptionPane.ERROR_MESSAGE);
+
             }
         }
     }
-    
-    public void setItemBuscaEmprestimo(ItemBuscaEmprestimo e){
-        itemEmprestimo = e;
-        txtCodBarras.setText(e.getCodBarras());
-        txtDataEmprestimo.setText(e.getDataEmprestimo());
-        txtIDBibliotecario.setText(String.valueOf(e.getIdBibliotecaria()));
-        txtIDEmprestimo.setText(String.valueOf(e.getIdEmprestimo()));
-        txtIDExemplar.setText(String.valueOf(e.getIdExemplar()));
-        txtIDUsuario.setText(String.valueOf(e.getIdUsuario()));
-        txtMulta.setText(String.valueOf(e.getMulta()));
-        txtNomeUsuario.setText(e.getNomeUsuario());
-        txtPrevisaoDevolucao.setText(e.getDataPrevistaDevol());
-        if(e.getDataDevolucao().equals("11/11/1111")){
-            txtDataDevolucao.setText("");
-        }else{
-            txtDataDevolucao.setText(e.getDataDevolucao());
-        }
-        txtRenovacoes.setText(String.valueOf(e.getQtdRenovacoes())+"/"+Sistema.getQtdRenovacoesPermitir());
-        txtTitulo.setText(e.getTitulo());
-        camposBuscado();
-    }
-    
-    public void setUsuario(Usuario a){
-        usuario = a;
-        txtIDUsuario.setText(String.valueOf(a.getId()));
-        txtNomeUsuario.setText(a.getNome());
-    }
-    
-    public void setItemBuscaExemplar(ItemBuscaExemplar item){
-        this.item = item;
-        txtIDExemplar.setText(String.valueOf(item.getIdExemplar()));
-        txtTitulo.setText(item.getTitulo());
-    }
-    
+
     private TelaEmprestimo() {
         initComponents();
     }
-    
-    public TelaEmprestimo(Parente parent){
+
+    public TelaEmprestimo(Parente parent) {
         this();
         this.parent = parent;
         this.setIconImage(parent.getIcone());
@@ -470,7 +440,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     }//GEN-LAST:event_txtIDExemplarActionPerformed
 
     private void btnBuscarExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarExemplarActionPerformed
-        BuscaExemplar b = new BuscaExemplar(null, this);
+        BuscaExemplar b = new BuscaExemplar(this);
         setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarExemplarActionPerformed
@@ -483,23 +453,23 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         camposNovo();
         txtIDBibliotecario.setText(String.valueOf(((Bibliotecaria) ((Dependente) parent).getInformacaoDependente()).getId()));
-	LocalDate dateNow = LocalDate.now(); 
-	txtDataEmprestimo.setText(dateNow.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        LocalDate dateNow = LocalDate.now();
+        txtDataEmprestimo.setText(dateNow.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         LocalDate dataPrevi = dateNow.plusDays(31);
         txtPrevisaoDevolucao.setText(dataPrevi.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        txtRenovacoes.setText("0/"+Sistema.getQtdRenovacoesPermitir());
+        txtRenovacoes.setText("0/" + Sistema.getQtdRenovacoesPermitir());
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         int a = JOptionPane.showConfirmDialog(null, "Realmente deseja cancelar?", "Cancelar Operação", JOptionPane.YES_NO_OPTION);
-        if(a == 0){
+        if (a == 0) {
             restaurarTela();
         }
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuarioActionPerformed
-        BuscaUsuario b = new BuscaUsuario(null, this);
-        this.enable(false);
+        BuscaUsuario b = new BuscaUsuario(this);
+        setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
 
@@ -509,110 +479,110 @@ public class TelaEmprestimo extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         BuscaEmprestimo b = new BuscaEmprestimo(this);
-        this.enable(false);
+        setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         int a = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o empréstimo?\nTodos os dados referentes a ele serão excluídos do sistema.", "Excluir Empréstimo", JOptionPane.YES_NO_OPTION);
-        if(a == 0){
+        if (a == 0) {
             excluir();
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnRenovarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRenovarActionPerformed
         String dat = itemEmprestimo.getDataPrevistaDevol();
-        
+
         verificaAtraso(dat, "renovar");
     }//GEN-LAST:event_btnRenovarActionPerformed
 
     private void btnDevolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolverActionPerformed
         String dat = itemEmprestimo.getDataPrevistaDevol();
-        
+
         verificaAtraso(dat, "devolver");
     }//GEN-LAST:event_btnDevolverActionPerformed
 
-    private void verificaAtraso(String data, String botao){
-        int conf = JOptionPane.showConfirmDialog(null, "Realmente deseja "+botao+"?", "Cancelar Operação", JOptionPane.YES_NO_OPTION);
-        if(conf == 0){
+    private void verificaAtraso(String data, String botao) {
+        int conf = JOptionPane.showConfirmDialog(null, "Realmente deseja " + botao + "?", "Cancelar Operação", JOptionPane.YES_NO_OPTION);
+        if (conf == 0) {
             String spl[] = data.split("/");
             LocalDate hoje = LocalDate.now();
             LocalDate previ = LocalDate.of(Integer.parseInt(spl[2]), Integer.parseInt(spl[1]), Integer.parseInt(spl[0]));
             int diasAtrasados = qtdDiasDiferenca(previ, hoje);
-            if(diasAtrasados > 0){
-                int a = JOptionPane.showConfirmDialog(null, "O exemplar está atrasado em "+diasAtrasados+" dias!\nMulta referente ao atraso(dia): R$"+Sistema.getValorMultaPorDia()+"\nMulta referente ao atraso(Total): R$"+(diasAtrasados*Sistema.getValorMultaPorDia())+"\nDeseja confirmar o recebimento deste valor?", "Confirmar recebimento do valor", JOptionPane.YES_NO_OPTION);
-                if(a == 0){
-                    if(botao.equals("renovar")){
-                        renovar(itemEmprestimo.getMulta()+(Sistema.getValorMultaPorDia()*diasAtrasados));
-                    }else if(botao.equals("devolver")){
-                        devolver(itemEmprestimo.getMulta()+(Sistema.getValorMultaPorDia()*diasAtrasados));
+            if (diasAtrasados > 0) {
+                int a = JOptionPane.showConfirmDialog(null, "O exemplar está atrasado em " + diasAtrasados + " dias!\nMulta referente ao atraso(dia): R$" + Sistema.getValorMultaPorDia() + "\nMulta referente ao atraso(Total): R$" + (diasAtrasados * Sistema.getValorMultaPorDia()) + "\nDeseja confirmar o recebimento deste valor?", "Confirmar recebimento do valor", JOptionPane.YES_NO_OPTION);
+                if (a == 0) {
+                    if (botao.equals("renovar")) {
+                        renovar(itemEmprestimo.getMulta() + (Sistema.getValorMultaPorDia() * diasAtrasados));
+                    } else if (botao.equals("devolver")) {
+                        devolver(itemEmprestimo.getMulta() + (Sistema.getValorMultaPorDia() * diasAtrasados));
                     }
                 }
-            }else{
-                if(botao.equals("renovar")){
+            } else {
+                if (botao.equals("renovar")) {
                     renovar(0);
-                }else if(botao.equals("devolver")){
+                } else if (botao.equals("devolver")) {
                     devolver(0);
                 }
             }
         }
     }
-    
-    private void excluir(){
+
+    private void excluir() {
         boolean resu = eb.excluirEmprestimo(itemEmprestimo.getIdEmprestimo());
-        if(resu){
+        if (resu) {
             JOptionPane.showMessageDialog(null, "Empréstimo excluído com sucesso!", "Exclusão bem sucedida", JOptionPane.INFORMATION_MESSAGE);
             restaurarTela();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Erro ao tentar excluir o empréstimo!", "Erro na exclusão", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void devolver(float valMulta){
+
+    private void devolver(float valMulta) {
         boolean resu = eb.devolverEmprestimo(itemEmprestimo.getIdEmprestimo(), valMulta, itemEmprestimo.getIdExemplar());
-        if(resu){
+        if (resu) {
             JOptionPane.showMessageDialog(null, "Exemplar devolvido com sucesso!", "Exemplar devolvido", JOptionPane.INFORMATION_MESSAGE);
             restaurarTela();
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Erro ao tentar devolver exemplar!", "Errao ao devolver exemplar", JOptionPane.ERROR_MESSAGE);
         }
-        
-    }
-    
-    private void renovar(float valMulta){
-        if((itemEmprestimo.getQtdRenovacoes()+1) <= 10){
-            LocalDate hoje = LocalDate.now();
-            boolean ret = eb.renovarEmprestimo(itemEmprestimo.getIdEmprestimo(), itemEmprestimo.getQtdRenovacoes()+1, valMulta);
-            if(ret){
-                restaurarTela();
-                JOptionPane.showMessageDialog(null, "Renovação efetuada com sucesso!\nNova data de devolução: "+hoje.plusDays(31).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Renovação efetuada", JOptionPane.INFORMATION_MESSAGE);
 
-            }else{
+    }
+
+    private void renovar(float valMulta) {
+        if ((itemEmprestimo.getQtdRenovacoes() + 1) <= 10) {
+            LocalDate hoje = LocalDate.now();
+            boolean ret = eb.renovarEmprestimo(itemEmprestimo.getIdEmprestimo(), itemEmprestimo.getQtdRenovacoes() + 1, valMulta);
+            if (ret) {
+                restaurarTela();
+                JOptionPane.showMessageDialog(null, "Renovação efetuada com sucesso!\nNova data de devolução: " + hoje.plusDays(31).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), "Renovação efetuada", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
                 JOptionPane.showMessageDialog(null, "Erro ao realizar a renovação!", "Erro ao tentar renovar", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Este exemplar já excedeu o numero máximo de renovações!", "Limite de renovações excedido", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private int qtdDiasDiferenca(LocalDate inicio, LocalDate fim){
+
+    private int qtdDiasDiferenca(LocalDate inicio, LocalDate fim) {
         Period p = Period.between(inicio, fim);
-        
-        int total = (p.getYears()*365) + (p.getMonths()*31) + p.getDays();
+
+        int total = (p.getYears() * 365) + (p.getMonths() * 31) + p.getDays();
         return total;
     }
-    
-    private void cadastrar(){
-        if(!txtIDExemplar.getText().equals("") && !txtIDUsuario.getText().equals("")){
+
+    private void cadastrar() {
+        if (!txtIDExemplar.getText().equals("") && !txtIDUsuario.getText().equals("")) {
             TelaAutorizEmpr t = new TelaAutorizEmpr(this);
             this.enable(false);
             t.setVisible(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Preencha os campos exemplar e o usuário!", "Campos vazios", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void camposNovo(){
+
+    private void camposNovo() {
         limparCampos();
         btnRenovar.setEnabled(false);
         btnDevolver.setEnabled(false);
@@ -623,31 +593,31 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         btnNovo.setEnabled(false);
         btnBuscar.setEnabled(false);
         btnAtualizar.setEnabled(false);
-        btnExcluir.setEnabled(false); 
+        btnExcluir.setEnabled(false);
         modo = "novo";
     }
-    
-    private void camposBuscado(){
+
+    private void camposBuscado() {
         btnAtualizar.setEnabled(false);
-        
+
         btnNovo.setEnabled(true);
         btnBuscar.setEnabled(true);
         btnCancelar.setEnabled(false);
-        btnConfirmar.setEnabled(false); 
-        
-        if(itemEmprestimo.getDataDevolucao().equals("11/11/1111")){
+        btnConfirmar.setEnabled(false);
+
+        if (itemEmprestimo.getDataDevolucao().equals("11/11/1111")) {
             btnDevolver.setEnabled(true);
             btnRenovar.setEnabled(true);
             btnExcluir.setEnabled(false);
-        }else{
+        } else {
             btnDevolver.setEnabled(false);
             btnRenovar.setEnabled(false);
             btnExcluir.setEnabled(true);
         }
-        
+
     }
-    
-    private void limparCampos(){
+
+    private void limparCampos() {
         txtDataEmprestimo.setText("");
         txtIDBibliotecario.setText("");
         txtIDEmprestimo.setText("");
@@ -662,8 +632,8 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         txtDataDevolucao.setText("");
         autorizado = false;
     }
-    
-    private void restaurarTela(){
+
+    private void restaurarTela() {
         limparCampos();
         btnRenovar.setEnabled(false);
         btnDevolver.setEnabled(false);
@@ -675,10 +645,10 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         btnAtualizar.setEnabled(false);
         btnNovo.setEnabled(true);
         btnBuscar.setEnabled(true);
-        
+
         modo = null;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -753,4 +723,56 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private javax.swing.JTextField txtRenovacoes;
     private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Image getIcone() {
+        return getIconImage();
+    }
+
+    @Override
+    public void setEstadoAtivacao(boolean enable) {
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setParente(Parente p) {
+
+    }
+
+    @Override
+    public void setInformacaoDependente(Object o) {
+        if (o instanceof Usuario) {
+            usuario = (Usuario) o;
+            txtIDUsuario.setText(String.valueOf(this.usuario.getId()));
+            txtNomeUsuario.setText(this.usuario.getNome());
+        } else if (o instanceof ItemBuscaExemplar) {
+            this.item = (ItemBuscaExemplar) o;
+            txtIDExemplar.setText(String.valueOf(this.item.getIdExemplar()));
+            txtTitulo.setText(this.item.getTitulo());
+        } else if (o instanceof ItemBuscaEmprestimo) {
+            this.itemEmprestimo = (ItemBuscaEmprestimo) o;
+            txtCodBarras.setText(this.itemEmprestimo.getCodBarras());
+            txtDataEmprestimo.setText(this.itemEmprestimo.getDataEmprestimo());
+            txtIDBibliotecario.setText(String.valueOf(this.itemEmprestimo.getIdBibliotecaria()));
+            txtIDEmprestimo.setText(String.valueOf(this.itemEmprestimo.getIdEmprestimo()));
+            txtIDExemplar.setText(String.valueOf(this.itemEmprestimo.getIdExemplar()));
+            txtIDUsuario.setText(String.valueOf(this.itemEmprestimo.getIdUsuario()));
+            txtMulta.setText(String.valueOf(this.itemEmprestimo.getMulta()));
+            txtNomeUsuario.setText(this.itemEmprestimo.getNomeUsuario());
+            txtPrevisaoDevolucao.setText(this.itemEmprestimo.getDataPrevistaDevol());
+            if (this.itemEmprestimo.getDataDevolucao().equals("11/11/1111")) {
+                txtDataDevolucao.setText("");
+            } else {
+                txtDataDevolucao.setText(this.itemEmprestimo.getDataDevolucao());
+            }
+            txtRenovacoes.setText(String.valueOf(this.itemEmprestimo.getQtdRenovacoes()) + "/" + Sistema.getQtdRenovacoesPermitir());
+            txtTitulo.setText(this.itemEmprestimo.getTitulo());
+            camposBuscado();
+        }
+    }
+
+    @Override
+    public Object getInformacaoDependente() {
+        return null;
+    }
 }

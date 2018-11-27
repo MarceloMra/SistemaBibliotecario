@@ -9,6 +9,7 @@ import banco.BibliotecarioBanco;
 import banco.Conexao;
 import interfaces.Dependente;
 import interfaces.Parente;
+import java.awt.Image;
 import javax.swing.JOptionPane;
 import model.Bibliotecaria;
 
@@ -16,26 +17,12 @@ import model.Bibliotecaria;
  *
  * @author Marcelo Moreira
  */
-public class Bibliotecario extends javax.swing.JFrame {
+public class Bibliotecario extends javax.swing.JFrame implements Dependente, Parente{
     private Parente parent;
     private BibliotecarioBanco cb;
     private String modo;
     private Bibliotecaria bibliotecaria;
     
-    public void setBibliotecaria(Bibliotecaria b){
-        bibliotecaria = b;
-        txtID.setText(String.valueOf(b.getId()));
-        txtNome.setText(b.getNome());
-        txtCpf.setText(b.getCpf());
-        txtEmail.setText(b.getEmail());
-        modo = "buscado";
-        camposBuscado();
-        if(b.getTipo().equals("normal")){
-            rbNormal.setSelected(true);
-        }else if(b.getTipo().equals("admin")){
-            rbAdmin.setSelected(true);
-        }
-    }
     /**
      * Creates new form CadBibliotecario
      */
@@ -571,4 +558,40 @@ public class Bibliotecario extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtSenha;
     private javax.swing.JPasswordField txtSenhaConfirm;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setInformacaoDependente(Object o) {
+        this.bibliotecaria = (Bibliotecaria) o;
+        txtID.setText(String.valueOf(this.bibliotecaria.getId()));
+        txtNome.setText(this.bibliotecaria.getNome());
+        txtCpf.setText(this.bibliotecaria.getCpf());
+        txtEmail.setText(this.bibliotecaria.getEmail());
+        modo = "buscado";
+        camposBuscado();
+        if(this.bibliotecaria.getTipo().equals("normal")){
+            rbNormal.setSelected(true);
+        }else if(this.bibliotecaria.getTipo().equals("admin")){
+            rbAdmin.setSelected(true);
+        }
+    }
+
+    @Override
+    public Object getInformacaoDependente() {
+        return null;
+    }
+
+    @Override
+    public Image getIcone() {
+        return getIconImage();
+    }
+
+    @Override
+    public void setEstadoAtivacao(boolean enable) {
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setParente(Parente p) {
+        
+    }
 }

@@ -7,6 +7,8 @@ package view;
 
 import banco.BuscaUsuarioBanco;
 import banco.Conexao;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,8 +19,7 @@ import model.Usuario;
  * @author Marcelo Moreira
  */
 public class BuscaUsuario extends javax.swing.JFrame {
-    private TelaUsuario parentUsuario;
-    private TelaEmprestimo parentEmprestimo;
+    private Parente parent;
     private ArrayList<Usuario> resultado;
     private BuscaUsuarioBanco bu;
     /**
@@ -28,16 +29,11 @@ public class BuscaUsuario extends javax.swing.JFrame {
         initComponents();
     }
     
-    public BuscaUsuario(TelaUsuario parentUsuario, TelaEmprestimo parentEmprestimo){
+    public BuscaUsuario(Parente parent){
         this();
-        this.parentUsuario = parentUsuario;
-        this.parentEmprestimo = parentEmprestimo;
-        resultado = new ArrayList<>();
-        if(parentUsuario != null){
-            this.setIconImage(this.parentUsuario.getIconImage());
-        }else if(parentEmprestimo != null){
-            this.setIconImage(this.parentEmprestimo.getIconImage());
-        }
+        this.parent = parent;
+        resultado = new ArrayList<>();        
+        this.setIconImage(this.parent.getIcone());        
         bu = new BuscaUsuarioBanco(Conexao.getConexao());
         inicializarTabela();
     }
@@ -201,16 +197,24 @@ public class BuscaUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_tbResultadoMouseClicked
 
     private void cbTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTipoBuscaItemStateChanged
-        if (cbTipoBusca.getSelectedIndex() == 0) {
-            lblConteudo.setText("ID:");
-        } else if (cbTipoBusca.getSelectedIndex() == 1) {
-            lblConteudo.setText("Nome:");
-        } else if (cbTipoBusca.getSelectedIndex() == 2) {
-            lblConteudo.setText("Tipo:");
-        } else if (cbTipoBusca.getSelectedIndex() == 3) {
-            lblConteudo.setText("CPF:");
-        }else if(cbTipoBusca.getSelectedIndex() == 4){
-            lblConteudo.setText("E-mail:");
+        switch (cbTipoBusca.getSelectedIndex()) {
+            case 0:
+                lblConteudo.setText("ID:");
+                break;
+            case 1:
+                lblConteudo.setText("Nome:");
+                break;
+            case 2:
+                lblConteudo.setText("Tipo:");
+                break;
+            case 3:
+                lblConteudo.setText("CPF:");
+                break;
+            case 4:
+                lblConteudo.setText("E-mail:");
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_cbTipoBuscaItemStateChanged
 
@@ -235,11 +239,7 @@ public class BuscaUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_cbTipoBuscaActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if(parentUsuario != null){
-            parentUsuario.enable(true);
-        }else if(parentEmprestimo != null){
-            parentEmprestimo.enable(true);
-        }
+        parent.setEstadoAtivacao(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void selecionar(){
@@ -249,13 +249,8 @@ public class BuscaUsuario extends javax.swing.JFrame {
             
             for(Usuario b : resultado){
                 if(b.getId() == id){
-                    if(parentUsuario != null){
-                        parentUsuario.setUsuario(b);
-                        parentUsuario.enable(true);
-                    }else if(parentEmprestimo != null){
-                        parentEmprestimo.setUsuario(b);
-                        parentEmprestimo.enable(true);
-                    }
+                    ((Dependente) parent).setInformacaoDependente(b);
+                    parent.setEstadoAtivacao(true);
                     this.dispose();
                     break;
                 }
@@ -270,21 +265,29 @@ public class BuscaUsuario extends javax.swing.JFrame {
     private void buscar() {
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            if (cbTipoBusca.getSelectedIndex() == 0) {
-                //ID
-                resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 0);
-            } else if (cbTipoBusca.getSelectedIndex() == 1) {
-                //Nome
-                resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 1);
-            }else if (cbTipoBusca.getSelectedIndex() == 2) {
-                //Tipo
-                resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 2);
-            } else if (cbTipoBusca.getSelectedIndex() == 3) {
-                //CPF
-                resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 3);
-            } else if (cbTipoBusca.getSelectedIndex() == 4) {
-                //Email
-                resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 4);
+            switch (cbTipoBusca.getSelectedIndex()) {
+                case 0:
+                    //ID
+                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 0);
+                    break;
+                case 1:
+                    //Nome
+                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 1);
+                    break;
+                case 2:
+                    //Tipo
+                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 2);
+                    break;
+                case 3:
+                    //CPF
+                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 3);
+                    break;
+                case 4:
+                    //Email
+                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 4);
+                    break;
+                default:
+                    break;
             }
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();

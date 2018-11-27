@@ -7,38 +7,27 @@ package view;
 
 import banco.ExemplarBanco;
 import banco.Conexao;
+import interfaces.Dependente;
 import interfaces.Parente;
+import java.awt.Image;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import model.Exemplar;
+import model.ItemBuscaExemplar;
 import model.Livro;
 
 /**
  *
  * @author Marcelo Moreira
  */
-public class TelaExemplar extends javax.swing.JFrame {
+public class TelaExemplar extends javax.swing.JFrame implements Dependente, Parente{
     private Parente parent;
     private ExemplarBanco ceb;
     private Livro livro;
     private String modo;
-    private Exemplar exemplar;
-    
-    public void setExemplar(Exemplar b){
-        exemplar = b;
-        txtCodBarras.setText(b.getCodBarras());
-        txtDataCadastro.setText(b.getDataCadastro());
-        txtIDExemplar.setText(String.valueOf(b.getIdExemplar()));
-        txtIdLivro.setText(String.valueOf(b.getIdLivro()));
-        camposBuscado();
-    }
-    
-    public void setLivro(Livro b){
-        livro = b;
-        txtIdLivro.setText(String.valueOf(b.getId()));
-    }
+    private ItemBuscaExemplar exemplar;
+        
     /**
      * Creates new form CadExemplar
      */
@@ -50,10 +39,10 @@ public class TelaExemplar extends javax.swing.JFrame {
         ceb = new ExemplarBanco(Conexao.getConexao());
     }
     
-    public TelaExemplar(Principal parent){
+    public TelaExemplar(Parente parent){
         this();
         this.parent = parent;
-        this.setIconImage(parent.getIconImage());
+        this.setIconImage(parent.getIcone());
         restaurarTela();
     }
 
@@ -274,7 +263,7 @@ public class TelaExemplar extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnBuscarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarLivroActionPerformed
-        BuscaLivro b = new BuscaLivro(null, this);
+        BuscaLivro b = new BuscaLivro(this);
         setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarLivroActionPerformed
@@ -312,7 +301,7 @@ public class TelaExemplar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        BuscaExemplar b = new BuscaExemplar(this,null);
+        BuscaExemplar b = new BuscaExemplar(this);
         setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -325,7 +314,7 @@ public class TelaExemplar extends javax.swing.JFrame {
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         int a = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o exemplar?", "Excluir Exemplar", JOptionPane.YES_NO_OPTION);
         if(a == 0){
-            if(!exemplar.getSituacao().equals("Emprestado")){
+            if(!exemplar.getSituacaoExemplar().equals("Emprestado")){
                 excluir();
             }else{
                 JOptionPane.showMessageDialog(null, "O exemplar está emprestado, aguarde a devolução do mesmo para efetuar a exclusão!", "Exemplar está emprestado", JOptionPane.INFORMATION_MESSAGE);
@@ -493,4 +482,39 @@ public class TelaExemplar extends javax.swing.JFrame {
     private javax.swing.JTextField txtIDExemplar;
     private javax.swing.JTextField txtIdLivro;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setInformacaoDependente(Object o) {
+        if(o instanceof ItemBuscaExemplar){
+            this.exemplar = (ItemBuscaExemplar) o;
+            txtCodBarras.setText(this.exemplar.getCodBarras());
+            txtDataCadastro.setText(this.exemplar.getDataCadastro());
+            txtIDExemplar.setText(String.valueOf(this.exemplar.getIdExemplar()));
+            txtIdLivro.setText(String.valueOf(this.exemplar.getIdLivro()));
+            camposBuscado();
+        }else if(o instanceof Livro){
+            this.livro = (Livro) o;
+            txtIdLivro.setText(String.valueOf(this.livro.getId()));
+        }
+    }
+
+    @Override
+    public Object getInformacaoDependente() {
+        return null;
+    }
+
+    @Override
+    public Image getIcone() {
+        return getIconImage();
+    }
+
+    @Override
+    public void setEstadoAtivacao(boolean enable) {
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setParente(Parente p) {
+        
+    }
 }

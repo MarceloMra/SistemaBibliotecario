@@ -7,6 +7,8 @@ package view;
 
 import banco.BuscaLivroBanco;
 import banco.Conexao;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,8 +19,7 @@ import model.Livro;
  * @author Marcelo Moreira
  */
 public class BuscaLivro extends javax.swing.JFrame {
-    private TelaLivro parentLivro;
-    private TelaExemplar parentExemplar;
+    private Parente parent;
     private ArrayList<Livro> resultado;
     private BuscaLivroBanco bl;
     /**
@@ -28,15 +29,11 @@ public class BuscaLivro extends javax.swing.JFrame {
         initComponents();
     }
     
-    public BuscaLivro(TelaLivro parentLivro, TelaExemplar parentExemplar){
+    public BuscaLivro(Parente parent){
         this();
-        this.parentExemplar = parentExemplar;
-        this.parentLivro = parentLivro;
-        if(parentExemplar != null){
-            this.setIconImage(parentExemplar.getIconImage());
-        }else{
-            this.setIconImage(parentLivro.getIconImage());
-        }
+        this.parent = parent;        
+        this.setIconImage(parent.getIcone());
+        
         resultado = new ArrayList<>();
         bl = new BuscaLivroBanco(Conexao.getConexao());
         inicializarTabela();
@@ -196,14 +193,21 @@ public class BuscaLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_tbResultadoMouseClicked
 
     private void cbTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTipoBuscaItemStateChanged
-        if (cbTipoBusca.getSelectedIndex() == 0) {
-            lblConteudo.setText("ID:");
-        } else if (cbTipoBusca.getSelectedIndex() == 1) {
-            lblConteudo.setText("Título:");
-        } else if (cbTipoBusca.getSelectedIndex() == 2) {
-            lblConteudo.setText("Autor:");
-        } else if (cbTipoBusca.getSelectedIndex() == 3) {
-            lblConteudo.setText("Editora:");
+        switch (cbTipoBusca.getSelectedIndex()) {
+            case 0:
+                lblConteudo.setText("ID:");
+                break;
+            case 1:
+                lblConteudo.setText("Título:");
+                break;
+            case 2:
+                lblConteudo.setText("Autor:");
+                break;
+            case 3:
+                lblConteudo.setText("Editora:");
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_cbTipoBuscaItemStateChanged
 
@@ -224,11 +228,7 @@ public class BuscaLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_txtConteudoBuscarKeyPressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if(parentExemplar != null){
-            parentExemplar.enable(true);
-        }else{
-            parentLivro.enable(true);
-        }
+        parent.setEstadoAtivacao(true);        
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
@@ -258,18 +258,25 @@ public class BuscaLivro extends javax.swing.JFrame {
     private void buscar() {
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            if (cbTipoBusca.getSelectedIndex() == 0) {
-                //ID
-                resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 0);
-            } else if (cbTipoBusca.getSelectedIndex() == 1) {
-                //Título
-                resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 1);
-            } else if (cbTipoBusca.getSelectedIndex() == 2) {
-                //Autor
-                resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 2);
-            } else if (cbTipoBusca.getSelectedIndex() == 3) {
-                //Editora
-                resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 3);
+            switch (cbTipoBusca.getSelectedIndex()) {
+                case 0:
+                    //ID
+                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 0);
+                    break;
+                case 1:
+                    //Título
+                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 1);
+                    break;
+                case 2:
+                    //Autor
+                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 2);
+                    break;
+                case 3:
+                    //Editora
+                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 3);
+                    break;
+                default:
+                    break;
             }
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
@@ -302,13 +309,8 @@ public class BuscaLivro extends javax.swing.JFrame {
             
             for(Livro b : resultado){
                 if(b.getId() == id){
-                    if(parentExemplar != null){
-                        parentExemplar.setLivro(b);
-                        parentExemplar.enable(true);
-                    }else{
-                        parentLivro.setLivro(b);
-                        parentLivro.enable(true);
-                    }
+                    ((Dependente) parent).setInformacaoDependente(b);
+                    parent.setEstadoAtivacao(true);
                     this.dispose();
                     break;
                 }

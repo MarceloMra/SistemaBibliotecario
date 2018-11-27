@@ -7,7 +7,9 @@ package view;
 
 import banco.UsuarioBanco;
 import banco.Conexao;
+import interfaces.Dependente;
 import interfaces.Parente;
+import java.awt.Image;
 import javax.swing.JOptionPane;
 import model.Usuario;
 
@@ -15,7 +17,7 @@ import model.Usuario;
  *
  * @author Marcelo Moreira
  */
-public class TelaUsuario extends javax.swing.JFrame {
+public class TelaUsuario extends javax.swing.JFrame implements Dependente, Parente{
     private Parente parent;
     private UsuarioBanco ub;
     private Usuario usuario;
@@ -305,7 +307,7 @@ public class TelaUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        BuscaUsuario bb = new BuscaUsuario(this, null);
+        BuscaUsuario bb = new BuscaUsuario(this);
         setEnabled(false);
         bb.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -547,4 +549,40 @@ public class TelaUsuario extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtSenha;
     private javax.swing.JPasswordField txtSenhaConfirm;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setInformacaoDependente(Object o) {
+        usuario = (Usuario) o;
+        txtID.setText(String.valueOf(this.usuario.getId()));
+        txtNome.setText(this.usuario.getNome());
+        txtCpf.setText(this.usuario.getCpf());
+        txtEmail.setText(this.usuario.getEmail());
+        modo = "buscado";
+        camposBuscado();
+        if(this.usuario.getTipo().equals("Aluno")){
+            rbAluno.setSelected(true);
+        }else if(this.usuario.getTipo().equals("Professor")){
+            rbProfessor.setSelected(true);
+        }
+    }
+
+    @Override
+    public Object getInformacaoDependente() {
+        return null;
+    }
+
+    @Override
+    public Image getIcone() {
+        return getIconImage();
+    }
+
+    @Override
+    public void setEstadoAtivacao(boolean enable) {
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setParente(Parente p) {
+        
+    }
 }

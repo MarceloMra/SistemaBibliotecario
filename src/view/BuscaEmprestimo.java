@@ -8,6 +8,8 @@ package view;
 
 import banco.BuscaEmprestimoBanco;
 import banco.Conexao;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +20,7 @@ import model.ItemBuscaEmprestimo;
  * @author Marcelo Moreira
  */
 public class BuscaEmprestimo extends javax.swing.JFrame {
-    private TelaEmprestimo parent;
+    private Parente parent;
     private BuscaEmprestimoBanco be;
     private ArrayList<ItemBuscaEmprestimo> resultado;
     
@@ -30,6 +32,7 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
     public BuscaEmprestimo(TelaEmprestimo parent){
         this();
         this.parent = parent;
+        this.setIconImage(parent.getIcone());
         be = new BuscaEmprestimoBanco(Conexao.getConexao());
         resultado = new ArrayList<>();
         inicializarTabela();
@@ -107,6 +110,11 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
                 cbTipoBuscaItemStateChanged(evt);
             }
         });
+        cbTipoBusca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbTipoBuscaActionPerformed(evt);
+            }
+        });
 
         btnBuscar.setLabel("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -178,7 +186,7 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
@@ -192,16 +200,24 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
     }//GEN-LAST:event_tbResultadoMouseClicked
 
     private void cbTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTipoBuscaItemStateChanged
-        if (cbTipoBusca.getSelectedIndex() == 0) {
-            lblConteudo.setText("ID:");
-        } else if (cbTipoBusca.getSelectedIndex() == 1) {
-            lblConteudo.setText("ID Usuário:");
-        } else if (cbTipoBusca.getSelectedIndex() == 2) {
-            lblConteudo.setText("Cód. Barras:");
-        } else if (cbTipoBusca.getSelectedIndex() == 3) {
-            lblConteudo.setText("Nome Usuário:");
-        } else if (cbTipoBusca.getSelectedIndex() == 4) {
-            lblConteudo.setText("Título:");
+        switch (cbTipoBusca.getSelectedIndex()) {
+            case 0:
+                lblConteudo.setText("ID:");
+                break;
+            case 1:
+                lblConteudo.setText("ID Usuário:");
+                break;
+            case 2:
+                lblConteudo.setText("Cód. Barras:");
+                break;
+            case 3:
+                lblConteudo.setText("Nome Usuário:");
+                break;
+            case 4:
+                lblConteudo.setText("Título:");
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_cbTipoBuscaItemStateChanged
 
@@ -221,6 +237,10 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtConteudoBuscarKeyPressed
 
+    private void cbTipoBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTipoBuscaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbTipoBuscaActionPerformed
+
     private void selecionar(){
         try{
             String id_exemp  = tbResultado.getValueAt(tbResultado.getSelectedRow(), 0).toString();
@@ -228,10 +248,9 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
             
             for(ItemBuscaEmprestimo b : resultado){
                 if(b.getIdEmprestimo()== id){  
-                    parent.setItemBuscaEmprestimo(b);
-                    parent.enable(true);
+                    ((Dependente) parent).setInformacaoDependente(b);
+                    parent.setEstadoAtivacao(true);
                     this.dispose();
-
                     break;
                 }
             }
@@ -246,20 +265,8 @@ public class BuscaEmprestimo extends javax.swing.JFrame {
     private void buscar(){
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            if (cbTipoBusca.getSelectedIndex() == 0) {
-                //ID
-                resultado = be.buscarItemEmprestimo(txtConteudoBuscar.getText(), 0);
-            } else if (cbTipoBusca.getSelectedIndex() == 1) {
-                //ID Usuario
-                resultado = be.buscarItemEmprestimo(txtConteudoBuscar.getText(), 1);
-            } else if (cbTipoBusca.getSelectedIndex() == 2) {
-                //Nome Usuario
-                resultado = be.buscarItemEmprestimo(txtConteudoBuscar.getText(), 2);
-            } else if (cbTipoBusca.getSelectedIndex() == 3) {
-                //Titulo
-                resultado = be.buscarItemEmprestimo(txtConteudoBuscar.getText(), 3);
-            }
-
+            resultado = be.buscarItemEmprestimo(txtConteudoBuscar.getText(), cbTipoBusca.getSelectedIndex());
+            
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
             while (dtbm.getRowCount() > 0) {
                 dtbm.removeRow(0);

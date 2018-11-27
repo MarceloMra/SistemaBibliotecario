@@ -7,6 +7,8 @@ package view;
 
 import banco.BuscaExemplarBanco;
 import banco.Conexao;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,8 +20,7 @@ import model.ItemBuscaExemplar;
  * @author Marcelo Moreira
  */
 public class BuscaExemplar extends javax.swing.JFrame {
-    private TelaExemplar parentExemplar;
-    private TelaEmprestimo parentEmprestimo;
+    private Parente parent;
     private ArrayList<ItemBuscaExemplar> resultado;
     private BuscaExemplarBanco be;
     /**
@@ -29,10 +30,9 @@ public class BuscaExemplar extends javax.swing.JFrame {
         initComponents();
     }
     
-    public BuscaExemplar(TelaExemplar parentExemplar, TelaEmprestimo parentEmprestimo){
+    public BuscaExemplar(Parente parent){
         this();
-        this.parentExemplar = parentExemplar;
-        this.parentEmprestimo = parentEmprestimo;
+        this.parent = parent;        
         resultado = new ArrayList<>();
         be = new BuscaExemplarBanco(Conexao.getConexao());
         inicializarTabela();
@@ -192,16 +192,24 @@ public class BuscaExemplar extends javax.swing.JFrame {
     }//GEN-LAST:event_tbResultadoMouseClicked
 
     private void cbTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTipoBuscaItemStateChanged
-        if (cbTipoBusca.getSelectedIndex() == 0) {
-            lblConteudo.setText("ID:");
-        } else if (cbTipoBusca.getSelectedIndex() == 1) {
-            lblConteudo.setText("Cod. Barras:");
-        } else if (cbTipoBusca.getSelectedIndex() == 2) {
-            lblConteudo.setText("Título:");
-        } else if (cbTipoBusca.getSelectedIndex() == 3) {
-            lblConteudo.setText("Autor:");
-        } else if(cbTipoBusca.getSelectedIndex() == 4){
-            lblConteudo.setText("Editora:");
+        switch (cbTipoBusca.getSelectedIndex()) {
+            case 0:
+                lblConteudo.setText("ID:");
+                break;
+            case 1:
+                lblConteudo.setText("Cod. Barras:");
+                break;
+            case 2:
+                lblConteudo.setText("Título:");
+                break;
+            case 3:
+                lblConteudo.setText("Autor:");
+                break;
+            case 4:
+                lblConteudo.setText("Editora:");
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_cbTipoBuscaItemStateChanged
 
@@ -222,32 +230,36 @@ public class BuscaExemplar extends javax.swing.JFrame {
     }//GEN-LAST:event_txtConteudoBuscarKeyPressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if(parentExemplar != null){ 
-            parentExemplar.enable(true);          
-        }else if(parentEmprestimo != null){
-            parentEmprestimo.enable(true);
-        }
+        parent.setEstadoAtivacao(true);        
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
     private void buscar(){
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            if (cbTipoBusca.getSelectedIndex() == 0) {
-                //ID
-                resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 0);
-            } else if (cbTipoBusca.getSelectedIndex() == 1) {
-                //Cod. Barras
-                resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 1);
-            } else if (cbTipoBusca.getSelectedIndex() == 2) {
-                //Título
-                resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 2);
-            } else if (cbTipoBusca.getSelectedIndex() == 3) {
-                //Autor
-                resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 3);
-            } else if (cbTipoBusca.getSelectedIndex() == 4) {
-                //Editora
-                resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 4);
+            switch (cbTipoBusca.getSelectedIndex()) {
+                case 0:
+                    //ID
+                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 0);
+                    break;
+                case 1:
+                    //Cod. Barras
+                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 1);
+                    break;
+                case 2:
+                    //Título
+                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 2);
+                    break;
+                case 3:
+                    //Autor
+                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 3);
+                    break;
+                case 4:
+                    //Editora
+                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 4);
+                    break;
+                default:
+                    break;
             }
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
@@ -287,22 +299,17 @@ public class BuscaExemplar extends javax.swing.JFrame {
                     e.setIdLivro(b.getIdLivro());
                     e.setCodBarras(b.getCodBarras());
                     e.setSituacao(b.getSituacaoExemplar());
-                    if(parentExemplar != null){
-                        parentExemplar.setExemplar(e);
-                        parentExemplar.enable(true);
-                        this.dispose();
-                    }else if(parentEmprestimo != null){
+                    if(parent instanceof TelaExemplar){
+                        ((Dependente) parent).setInformacaoDependente(b);
+                    }else if(parent instanceof TelaEmprestimo){
                         if(!b.getSituacaoExemplar().equals("Emprestado")){
-                            
-                            parentEmprestimo.setItemBuscaExemplar(b);
-                            parentEmprestimo.enable(true);
-                            this.dispose();
-                            
+                            ((Dependente) parent).setInformacaoDependente(b);
                         }else{
                             JOptionPane.showMessageDialog(null, "O exemplar escolhido já está emprestado!", "Exemplar emprestado", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                    
+                    parent.setEstadoAtivacao(true);
+                    this.dispose();
                     break;
                 }
             }

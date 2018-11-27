@@ -7,7 +7,8 @@ package view;
 
 import banco.BuscaBibliotecarioBanco;
 import banco.Conexao;
-import java.awt.event.KeyEvent;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -18,8 +19,7 @@ import model.Bibliotecaria;
  * @author Marcelo Moreira
  */
 public class BuscaBibliotecario extends javax.swing.JFrame {
-
-    private Bibliotecario parent;
+    private Parente parent;
     private BuscaBibliotecarioBanco bb;
     private ArrayList<Bibliotecaria> resultado;
 
@@ -30,10 +30,10 @@ public class BuscaBibliotecario extends javax.swing.JFrame {
         initComponents();
     }
 
-    public BuscaBibliotecario(Bibliotecario parent) {
+    public BuscaBibliotecario(Parente parent) {
         this();
         this.parent = parent;
-        this.setIconImage(this.parent.getIconImage());
+        this.setIconImage(this.parent.getIcone());
         resultado = new ArrayList<>();
         bb = new BuscaBibliotecarioBanco(Conexao.getConexao());
         inicializarTabela();
@@ -189,19 +189,26 @@ public class BuscaBibliotecario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbTipoBuscaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbTipoBuscaItemStateChanged
-        if (cbTipoBusca.getSelectedIndex() == 0) {
-            lblConteudo.setText("ID:");
-        } else if (cbTipoBusca.getSelectedIndex() == 1) {
-            lblConteudo.setText("Nome:");
-        } else if (cbTipoBusca.getSelectedIndex() == 2) {
-            lblConteudo.setText("CPF:");
-        } else if (cbTipoBusca.getSelectedIndex() == 3) {
-            lblConteudo.setText("E-mail:");
+        switch (cbTipoBusca.getSelectedIndex()) {
+            case 0:
+                lblConteudo.setText("ID:");
+                break;
+            case 1:
+                lblConteudo.setText("Nome:");
+                break;
+            case 2:
+                lblConteudo.setText("CPF:");
+                break;
+            case 3:
+                lblConteudo.setText("E-mail:");
+                break;
+            default:
+                break;
         }
     }//GEN-LAST:event_cbTipoBuscaItemStateChanged
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
@@ -246,8 +253,8 @@ public class BuscaBibliotecario extends javax.swing.JFrame {
             
             for(Bibliotecaria b : resultado){
                 if(b.getId() == id){
-                    parent.setBibliotecaria(b);
-                    parent.enable(true);
+                    ((Dependente) parent).setInformacaoDependente(b);
+                    parent.setEstadoAtivacao(true);
                     this.dispose();
                     break;
                 }
@@ -262,18 +269,25 @@ public class BuscaBibliotecario extends javax.swing.JFrame {
     private void buscar() {
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            if (cbTipoBusca.getSelectedIndex() == 0) {
-                //ID
-                resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 0);
-            } else if (cbTipoBusca.getSelectedIndex() == 1) {
-                //Nome
-                resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 1);
-            } else if (cbTipoBusca.getSelectedIndex() == 2) {
-                //CPF
-                resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 2);
-            } else if (cbTipoBusca.getSelectedIndex() == 3) {
-                //Email
-                resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 3);
+            switch (cbTipoBusca.getSelectedIndex()) {
+                case 0:
+                    //ID
+                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 0);
+                    break;
+                case 1:
+                    //Nome
+                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 1);
+                    break;
+                case 2:
+                    //CPF
+                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 2);
+                    break;
+                case 3:
+                    //Email
+                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 3);
+                    break;
+                default:
+                    break;
             }
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();

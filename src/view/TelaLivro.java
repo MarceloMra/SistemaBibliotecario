@@ -7,7 +7,9 @@ package view;
 
 import banco.LivroBanco;
 import banco.Conexao;
+import interfaces.Dependente;
 import interfaces.Parente;
+import java.awt.Image;
 import javax.swing.JOptionPane;
 import model.Livro;
 
@@ -15,22 +17,11 @@ import model.Livro;
  *
  * @author Marcelo Moreira
  */
-public class TelaLivro extends javax.swing.JFrame {
+public class TelaLivro extends javax.swing.JFrame implements Parente, Dependente{
     private LivroBanco clb;
     private Parente parent;
     private String modo;
     private Livro livro;
-    
-    public void setLivro(Livro b){
-        livro = b;
-        txtID.setText(String.valueOf(b.getId()));
-        txtAutor.setText(b.getAutor());
-        txtEditora.setText(b.getEditora());
-        txtTitulo.setText(b.getTitulo());
-        spEdicao.setValue(b.getEdicao());
-        modo = "buscado";
-        camposBuscado();
-    }
 
     /**
      * Creates new form CadLivro
@@ -279,7 +270,7 @@ public class TelaLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_txtEditoraKeyPressed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        BuscaLivro b = new BuscaLivro(this, null);
+        BuscaLivro b = new BuscaLivro(this);
         setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
@@ -468,4 +459,36 @@ public class TelaLivro extends javax.swing.JFrame {
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public Image getIcone() {
+        return getIconImage();
+    }
+
+    @Override
+    public void setEstadoAtivacao(boolean enable) {
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setParente(Parente p) {
+        
+    }
+
+    @Override
+    public void setInformacaoDependente(Object o) {
+        this.livro = (Livro) o;
+        txtID.setText(String.valueOf(this.livro.getId()));
+        txtAutor.setText(this.livro.getAutor());
+        txtEditora.setText(this.livro.getEditora());
+        txtTitulo.setText(this.livro.getTitulo());
+        spEdicao.setValue(this.livro.getEdicao());
+        modo = "buscado";
+        camposBuscado();
+    }
+
+    @Override
+    public Object getInformacaoDependente() {
+        return null;
+    }
 }
