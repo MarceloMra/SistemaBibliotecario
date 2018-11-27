@@ -180,6 +180,7 @@ public class Principal extends javax.swing.JFrame implements Parente, Dependente
         jMenuBar1.setBackground(new java.awt.Color(255, 255, 255));
         jMenuBar1.setForeground(new java.awt.Color(255, 255, 255));
 
+        menuSistema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/monitor.png"))); // NOI18N
         menuSistema.setText("Sistema");
 
         menuLogin.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
@@ -208,6 +209,7 @@ public class Principal extends javax.swing.JFrame implements Parente, Dependente
         });
         menuSistema.add(menuConfig);
 
+        menuSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/door_out.png"))); // NOI18N
         menuSair.setText("Sair");
         menuSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,8 +233,10 @@ public class Principal extends javax.swing.JFrame implements Parente, Dependente
 
         jMenuBar1.add(menuEmp);
 
+        menuLivro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/book.png"))); // NOI18N
         menuLivro.setText("Livro");
 
+        menuNovoLivro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/book.png"))); // NOI18N
         menuNovoLivro.setText("Livro");
         menuNovoLivro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,8 +247,10 @@ public class Principal extends javax.swing.JFrame implements Parente, Dependente
 
         jMenuBar1.add(menuLivro);
 
+        menuExemplar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/book.png"))); // NOI18N
         menuExemplar.setText("Exemplar");
 
+        menuNovoExemplar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/book.png"))); // NOI18N
         menuNovoExemplar.setText("Exemplar");
         menuNovoExemplar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -255,8 +261,10 @@ public class Principal extends javax.swing.JFrame implements Parente, Dependente
 
         jMenuBar1.add(menuExemplar);
 
+        menuUsu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/user.png"))); // NOI18N
         menuUsu.setText("Usuário");
 
+        menuUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/user.png"))); // NOI18N
         menuUsuario.setText("Usuário");
         menuUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,8 +275,10 @@ public class Principal extends javax.swing.JFrame implements Parente, Dependente
 
         jMenuBar1.add(menuUsu);
 
+        menuBibliotecaria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/user.png"))); // NOI18N
         menuBibliotecaria.setText("Bibliotecário(a)");
 
+        menuBibliotecario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/images/user.png"))); // NOI18N
         menuBibliotecario.setText("Bibliotecário(a)");
         menuBibliotecario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

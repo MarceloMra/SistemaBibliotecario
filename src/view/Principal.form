@@ -14,6 +14,9 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuSistema">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/view/images/monitor.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Sistema"/>
           </Properties>
           <SubComponents>
@@ -49,6 +52,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuSair">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/view/images/door_out.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Sair"/>
               </Properties>
               <Events>
@@ -77,11 +83,17 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuLivro">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/view/images/book.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Livro"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuNovoLivro">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/view/images/book.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Livro"/>
               </Properties>
               <Events>
@@ -92,11 +104,17 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuExemplar">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/view/images/book.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Exemplar"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuNovoExemplar">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/view/images/book.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Exemplar"/>
               </Properties>
               <Events>
@@ -107,11 +125,17 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuUsu">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/view/images/user.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Usu&#xe1;rio"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuUsuario">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/view/images/user.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Usu&#xe1;rio"/>
               </Properties>
               <Events>
@@ -122,11 +146,17 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuBibliotecaria">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/view/images/user.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Bibliotec&#xe1;rio(a)"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuBibliotecario">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/view/images/user.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Bibliotec&#xe1;rio(a)"/>
               </Properties>
               <Events>
