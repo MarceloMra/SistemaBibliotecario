@@ -265,30 +265,7 @@ public class BuscaUsuario extends javax.swing.JFrame {
     private void buscar() {
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            switch (cbTipoBusca.getSelectedIndex()) {
-                case 0:
-                    //ID
-                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 0);
-                    break;
-                case 1:
-                    //Nome
-                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 1);
-                    break;
-                case 2:
-                    //Tipo
-                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 2);
-                    break;
-                case 3:
-                    //CPF
-                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 3);
-                    break;
-                case 4:
-                    //Email
-                    resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), 4);
-                    break;
-                default:
-                    break;
-            }
+            resultado = bu.buscarUsuario(txtConteudoBuscar.getText(), cbTipoBusca.getSelectedIndex());            
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
             while (dtbm.getRowCount() > 0) {

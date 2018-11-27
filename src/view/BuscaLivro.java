@@ -258,26 +258,7 @@ public class BuscaLivro extends javax.swing.JFrame {
     private void buscar() {
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            switch (cbTipoBusca.getSelectedIndex()) {
-                case 0:
-                    //ID
-                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 0);
-                    break;
-                case 1:
-                    //Título
-                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 1);
-                    break;
-                case 2:
-                    //Autor
-                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 2);
-                    break;
-                case 3:
-                    //Editora
-                    resultado = bl.buscarLivro(txtConteudoBuscar.getText(), 3);
-                    break;
-                default:
-                    break;
-            }
+            resultado = bl.buscarLivro(txtConteudoBuscar.getText(), cbTipoBusca.getSelectedIndex());
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
             while (dtbm.getRowCount() > 0) {

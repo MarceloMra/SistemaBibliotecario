@@ -33,6 +33,7 @@ public class BuscaExemplar extends javax.swing.JFrame {
     public BuscaExemplar(Parente parent){
         this();
         this.parent = parent;        
+        this.setIconImage(parent.getIcone());
         resultado = new ArrayList<>();
         be = new BuscaExemplarBanco(Conexao.getConexao());
         inicializarTabela();
@@ -237,30 +238,7 @@ public class BuscaExemplar extends javax.swing.JFrame {
     private void buscar(){
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            switch (cbTipoBusca.getSelectedIndex()) {
-                case 0:
-                    //ID
-                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 0);
-                    break;
-                case 1:
-                    //Cod. Barras
-                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 1);
-                    break;
-                case 2:
-                    //Título
-                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 2);
-                    break;
-                case 3:
-                    //Autor
-                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 3);
-                    break;
-                case 4:
-                    //Editora
-                    resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), 4);
-                    break;
-                default:
-                    break;
-            }
+            resultado = be.buscarItemExemplar(txtConteudoBuscar.getText(), cbTipoBusca.getSelectedIndex());
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
             while (dtbm.getRowCount() > 0) {

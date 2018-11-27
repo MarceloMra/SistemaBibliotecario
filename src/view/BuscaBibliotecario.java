@@ -269,26 +269,7 @@ public class BuscaBibliotecario extends javax.swing.JFrame {
     private void buscar() {
         if (!txtConteudoBuscar.getText().equals("")) {
             resultado.clear();
-            switch (cbTipoBusca.getSelectedIndex()) {
-                case 0:
-                    //ID
-                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 0);
-                    break;
-                case 1:
-                    //Nome
-                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 1);
-                    break;
-                case 2:
-                    //CPF
-                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 2);
-                    break;
-                case 3:
-                    //Email
-                    resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), 3);
-                    break;
-                default:
-                    break;
-            }
+            resultado = bb.buscarBibliotecaria(txtConteudoBuscar.getText(), cbTipoBusca.getSelectedIndex());
 
             DefaultTableModel dtbm = (DefaultTableModel) tbResultado.getModel();
             while (dtbm.getRowCount() > 0) {
