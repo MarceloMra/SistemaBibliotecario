@@ -7,6 +7,7 @@ package view;
 
 import banco.ExemplarBanco;
 import banco.Conexao;
+import interfaces.Parente;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -19,7 +20,7 @@ import model.Livro;
  * @author Marcelo Moreira
  */
 public class TelaExemplar extends javax.swing.JFrame {
-    private Principal parent;
+    private Parente parent;
     private ExemplarBanco ceb;
     private Livro livro;
     private String modo;
@@ -268,13 +269,13 @@ public class TelaExemplar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
     private void btnBuscarLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarLivroActionPerformed
         BuscaLivro b = new BuscaLivro(null, this);
-        this.enable(false);
+        setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarLivroActionPerformed
 
@@ -312,7 +313,7 @@ public class TelaExemplar extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         BuscaExemplar b = new BuscaExemplar(this,null);
-        this.enable(false);
+        setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
 

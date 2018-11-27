@@ -8,6 +8,8 @@ package view;
 import banco.Conexao;
 import banco.EmprestimoBanco;
 import banco.Sistema;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.Period;
@@ -15,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import model.Bibliotecaria;
 import model.ItemBuscaEmprestimo;
 import model.ItemBuscaExemplar;
 import model.Usuario;
@@ -24,7 +27,7 @@ import model.Usuario;
  * @author Marcelo Moreira
  */
 public class TelaEmprestimo extends javax.swing.JFrame {
-    private Principal parent;
+    private Parente parent;
     private String modo;
     private ItemBuscaExemplar item;
     private EmprestimoBanco eb;
@@ -89,10 +92,10 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         initComponents();
     }
     
-    public TelaEmprestimo(Principal parent){
+    public TelaEmprestimo(Parente parent){
         this();
         this.parent = parent;
-        this.setIconImage(parent.getIconImage());
+        this.setIconImage(parent.getIcone());
         URL url = this.getClass().getResource("images/lupa.png");
         Icon icon = new ImageIcon(url);
         btnBuscarExemplar.setIcon(icon);
@@ -301,26 +304,25 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtCodBarras)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel11)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtIDBibliotecario)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel5)
-                                        .addComponent(txtRenovacoes, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(txtDataEmprestimo, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(jLabel3)))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
-                                .addComponent(txtPrevisaoDevolucao)
-                                .addComponent(jLabel12)
-                                .addComponent(txtDataDevolucao)
-                                .addComponent(txtMulta)))))
+                    .addComponent(jLabel11)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtIDBibliotecario)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel5)
+                                    .addComponent(txtRenovacoes, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtDataEmprestimo, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel3)))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                            .addComponent(txtPrevisaoDevolucao)
+                            .addComponent(jLabel12)
+                            .addComponent(txtDataDevolucao)
+                            .addComponent(txtMulta))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -332,9 +334,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtIDExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBuscarExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnBuscarExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIDExemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -469,18 +471,18 @@ public class TelaEmprestimo extends javax.swing.JFrame {
 
     private void btnBuscarExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarExemplarActionPerformed
         BuscaExemplar b = new BuscaExemplar(null, this);
-        this.enable(false);
+        setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarExemplarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         camposNovo();
-        txtIDBibliotecario.setText(String.valueOf(parent.getBibliotecarialogada().getId()));
+        txtIDBibliotecario.setText(String.valueOf(((Bibliotecaria) ((Dependente) parent).getInformacaoDependente()).getId()));
 	LocalDate dateNow = LocalDate.now(); 
 	txtDataEmprestimo.setText(dateNow.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         LocalDate dataPrevi = dateNow.plusDays(31);

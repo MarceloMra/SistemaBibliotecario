@@ -7,6 +7,7 @@ package view;
 
 import banco.LivroBanco;
 import banco.Conexao;
+import interfaces.Parente;
 import javax.swing.JOptionPane;
 import model.Livro;
 
@@ -16,7 +17,7 @@ import model.Livro;
  */
 public class TelaLivro extends javax.swing.JFrame {
     private LivroBanco clb;
-    private Principal parent;
+    private Parente parent;
     private String modo;
     private Livro livro;
     
@@ -39,10 +40,10 @@ public class TelaLivro extends javax.swing.JFrame {
         clb = new LivroBanco(Conexao.getConexao());
     }
 
-    public TelaLivro(Principal parent) {
+    public TelaLivro(Parente parent) {
         this();
         this.parent = parent;
-        this.setIconImage(parent.getIconImage());
+        this.setIconImage(parent.getIcone());
         restaurarTela();
     }
 
@@ -247,7 +248,7 @@ public class TelaLivro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
@@ -279,7 +280,7 @@ public class TelaLivro extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         BuscaLivro b = new BuscaLivro(this, null);
-        this.enable(false);
+        setEnabled(false);
         b.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
 

@@ -7,6 +7,8 @@ package view;
 
 import banco.BibliotecarioBanco;
 import banco.Conexao;
+import interfaces.Dependente;
+import interfaces.Parente;
 import javax.swing.JOptionPane;
 import model.Bibliotecaria;
 
@@ -15,7 +17,7 @@ import model.Bibliotecaria;
  * @author Marcelo Moreira
  */
 public class Bibliotecario extends javax.swing.JFrame {
-    private Principal parent;
+    private Parente parent;
     private BibliotecarioBanco cb;
     private String modo;
     private Bibliotecaria bibliotecaria;
@@ -43,10 +45,10 @@ public class Bibliotecario extends javax.swing.JFrame {
         
     }
     
-    public Bibliotecario(Principal parent) {
+    public Bibliotecario(Parente parent) {
         this();
         this.parent = parent;
-        this.setIconImage(this.parent.getIconImage());
+        this.setIconImage(this.parent.getIcone());
         restaurarTela();
     }
 
@@ -294,7 +296,7 @@ public class Bibliotecario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
@@ -313,7 +315,7 @@ public class Bibliotecario extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         BuscaBibliotecario bb = new BuscaBibliotecario(this);
-        this.enable(false);
+        setEnabled(false);
         bb.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -334,7 +336,7 @@ public class Bibliotecario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtualizarActionPerformed
 
     private void excluir(){
-        if(Integer.parseInt(txtID.getText()) != parent.getBibliotecarialogada().getId()){
+        if(Integer.parseInt(txtID.getText()) != ((Bibliotecaria) ((Dependente) parent).getInformacaoDependente()).getId()){
             int id = Integer.parseInt(txtID.getText());
             boolean resul = cb.excluirBibliotecario(id);
             if(resul){
@@ -360,7 +362,8 @@ public class Bibliotecario extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Erro ao tentar realizar a atualização dos dados!\nO email requisitado pode ja ter sido cadastrado no sistema.", "Atualização não efetuada", JOptionPane.ERROR_MESSAGE);
                     }
                 }else{
-                    
+                    txtSenha.setText("");
+                    txtSenhaConfirm.setText("");
                     JOptionPane.showMessageDialog(null, "As senhas são incompatíveis!", "Senhas incompatíveis", JOptionPane.ERROR_MESSAGE);
                     txtSenha.requestFocus();
                 }
@@ -395,9 +398,9 @@ public class Bibliotecario extends javax.swing.JFrame {
     }
     
     private void cadastrar(){
-        if(txtSenha.getText().equals(txtSenhaConfirm.getText())){
+        if(txtSenha.getPassword().equals(txtSenhaConfirm.getPassword())){
             if(!txtCpf.getText().equals("") && !txtEmail.getText().equals("") && !txtNome.getText().equals("") && (rbNormal.isSelected() || rbAdmin.isSelected())){
-                boolean res = cb.cadastrarBibliotecario(txtNome.getText(), txtCpf.getText(), tipo(),txtEmail.getText(), txtSenha.getText());
+                boolean res = cb.cadastrarBibliotecario(txtNome.getText(), txtCpf.getText(), tipo(),txtEmail.getText(), String.valueOf(txtSenha.getPassword()));
                 if(res){                    
                     JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!", "Cadastro efetuado", JOptionPane.INFORMATION_MESSAGE);
                     restaurarTela();
@@ -455,7 +458,7 @@ public class Bibliotecario extends javax.swing.JFrame {
         btnCancelar.setEnabled(false);
         btnBuscar.setEnabled(true);
         
-        if(parent.getBibliotecarialogada().getTipo().equals("admin")){
+        if(((Bibliotecaria) ((Dependente) parent).getInformacaoDependente()).getTipo().equals("admin")){
             btnNovo.setEnabled(true);
             btnAtualizar.setEnabled(true);
             btnExcluir.setEnabled(true);
@@ -488,7 +491,7 @@ public class Bibliotecario extends javax.swing.JFrame {
     
     private void restaurarTela(){
         limparCampos();
-        if(parent.getBibliotecarialogada().getTipo().equals("admin")){
+        if(((Bibliotecaria) ((Dependente) parent).getInformacaoDependente()).getTipo().equals("admin")){
             btnNovo.setEnabled(true);
         }else{
             btnNovo.setEnabled(false);

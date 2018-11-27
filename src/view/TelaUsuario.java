@@ -7,6 +7,7 @@ package view;
 
 import banco.UsuarioBanco;
 import banco.Conexao;
+import interfaces.Parente;
 import javax.swing.JOptionPane;
 import model.Usuario;
 
@@ -15,7 +16,7 @@ import model.Usuario;
  * @author Marcelo Moreira
  */
 public class TelaUsuario extends javax.swing.JFrame {
-    private Principal parent;
+    private Parente parent;
     private UsuarioBanco ub;
     private Usuario usuario;
     private String modo;
@@ -40,9 +41,10 @@ public class TelaUsuario extends javax.swing.JFrame {
         ub = new UsuarioBanco(Conexao.getConexao());
     }
     
-    public TelaUsuario(Principal parent){
+    public TelaUsuario(Parente parent){
         this();
         this.parent = parent;
+        this.setIconImage(this.parent.getIcone());
         restaurarTela();
     }
 
@@ -281,7 +283,7 @@ public class TelaUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
         restaurarTela();
     }//GEN-LAST:event_formWindowClosing
 
@@ -304,7 +306,7 @@ public class TelaUsuario extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         BuscaUsuario bb = new BuscaUsuario(this, null);
-        this.enable(false);
+        setEnabled(false);
         bb.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
 

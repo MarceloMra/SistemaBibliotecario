@@ -7,9 +7,12 @@ package view;
 
 import banco.Conexao;
 import banco.Sistema;
+import interfaces.Dependente;
+import interfaces.Parente;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.net.URL;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import model.Bibliotecaria;
 
@@ -20,7 +23,7 @@ import model.Bibliotecaria;
  *
  * @author Gigo
  */
-public class Principal extends javax.swing.JFrame {
+public class Principal extends javax.swing.JFrame implements Parente, Dependente{
     private Bibliotecaria bibliotecariaLogada;
     private Conexao conexao;
     private Login telaLogin;
@@ -30,22 +33,6 @@ public class Principal extends javax.swing.JFrame {
     private TelaEmprestimo telaEmprestimo;
     private Sistema sistema;
     
-
-    public void setBibliotecariaLogada(Bibliotecaria bibliotecariaLogada) {
-        this.bibliotecariaLogada = bibliotecariaLogada;
-        txtIdBibliotecariaLogada.setText(String.valueOf(bibliotecariaLogada.getId()));
-        txtNomeBibliotecariaLogada.setText(bibliotecariaLogada.getNome());
-        if(bibliotecariaLogada.getTipo().equals("admin")){
-            txtTipoBiblioLogada.setText("Administrador");
-        }else if(bibliotecariaLogada.getTipo().equals("normal")){
-            txtTipoBiblioLogada.setText("Normal");
-        }
-        liberarPrograma();
-    }
-    
-    public Bibliotecaria getBibliotecarialogada(){
-        return this.bibliotecariaLogada;
-    }
     /**
      * Creates new form Principal
      */
@@ -55,6 +42,17 @@ public class Principal extends javax.swing.JFrame {
         URL url = this.getClass().getResource("images/logo.png");
         Image imagemTitulo = Toolkit.getDefaultToolkit().getImage(url);
         this.setIconImage(imagemTitulo);
+        
+        /*try {
+            Process p = Runtime.getRuntime().exec("C:\\xampp\\xampp_start.exe");
+            if (p.exitValue() == 0) {
+                System.out.println("Programa terminou normalmente");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Xampp não foi encontrado no diretório C:\\xampp", "Erro ao inicializar o xampp", JOptionPane.ERROR_MESSAGE);
+        }
+        */
+        
         conexao = new Conexao();
         sistema = new Sistema(Conexao.getConexao());
         bloquearPrograma();
@@ -66,14 +64,6 @@ public class Principal extends javax.swing.JFrame {
         telaCadExemplar = new TelaExemplar(this);
         telaEmprestimo = new TelaEmprestimo(this);
         
-        try {
-            Process p = Runtime.getRuntime().exec("C:\\xampp\\xampp_start.exe");
-            if (p.exitValue() == 0) {
-                System.out.println("Programa terminou normalmente");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Xampp não foi encontrado no diretório C:\\xampp", "Erro ao inicializar o xampp", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     /**
@@ -320,12 +310,12 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuLogoffActionPerformed
 
     private void menuNovoLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNovoLivroActionPerformed
-        this.enable(false);
+        setEnabled(false);
         telaCadLivro.setVisible(true);
     }//GEN-LAST:event_menuNovoLivroActionPerformed
 
     private void menuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoginActionPerformed
-        this.enable(false);
+        setEnabled(false);
         telaLogin.setVisible(true);
     }//GEN-LAST:event_menuLoginActionPerformed
 
@@ -335,29 +325,28 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuBibliotecarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBibliotecarioActionPerformed
         Bibliotecario telaBiblio = new Bibliotecario(this);
-        this.enable(false);
+        setEnabled(false);
         telaBiblio.setVisible(true);
     }//GEN-LAST:event_menuBibliotecarioActionPerformed
 
     private void menuUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuarioActionPerformed
-        
-        this.enable(false);
+        setEnabled(false);
         telaCadUsuario.setVisible(true);
     }//GEN-LAST:event_menuUsuarioActionPerformed
 
     private void menuNovoExemplarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNovoExemplarActionPerformed
-        this.enable(false);
+        setEnabled(false);
         telaCadExemplar.setVisible(true);
     }//GEN-LAST:event_menuNovoExemplarActionPerformed
 
     private void menuEmprestimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmprestimoActionPerformed
-        this.enable(false);
+        setEnabled(false);
         telaEmprestimo.setVisible(true);
     }//GEN-LAST:event_menuEmprestimoActionPerformed
 
     private void menuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConfigActionPerformed
         TelaConfig t = new TelaConfig(this);
-        this.enable(false);
+        setEnabled(false);
         t.setVisible(true);
     }//GEN-LAST:event_menuConfigActionPerformed
 
@@ -454,4 +443,37 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel txtStatusPrograma;
     private java.awt.TextField txtTipoBiblioLogada;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setEstadoAtivacao(boolean enable) {
+        setEnabled(enable);
+    }
+
+    @Override
+    public void setParente(Parente p) {
+        
+    }
+
+    @Override
+    public Image getIcone() {
+        return getIconImage();
+    }
+
+    @Override
+    public void setInformacaoDependente(Object o) {
+        this.bibliotecariaLogada = (Bibliotecaria) o;
+        txtIdBibliotecariaLogada.setText(String.valueOf(bibliotecariaLogada.getId()));
+        txtNomeBibliotecariaLogada.setText(bibliotecariaLogada.getNome());
+        if(bibliotecariaLogada.getTipo().equals("admin")){
+            txtTipoBiblioLogada.setText("Administrador");
+        }else if(bibliotecariaLogada.getTipo().equals("normal")){
+            txtTipoBiblioLogada.setText("Normal");
+        }
+        liberarPrograma();
+    }
+
+    @Override
+    public Object getInformacaoDependente() {
+        return this.bibliotecariaLogada;
+    }
 }

@@ -8,6 +8,7 @@ package view;
 import banco.Conexao;
 import banco.ConfigBanco;
 import banco.Sistema;
+import interfaces.Parente;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,7 +16,7 @@ import javax.swing.JOptionPane;
  * @author Marcelo Moreira
  */
 public class TelaConfig extends javax.swing.JFrame {
-    private Principal parent;
+    private Parente parent;
     private ConfigBanco cb;
     /**
      * Creates new form TelaConfig
@@ -24,10 +25,10 @@ public class TelaConfig extends javax.swing.JFrame {
         initComponents();
     }
     
-    public TelaConfig(Principal parent){
+    public TelaConfig(Parente parent){
         this();
         this.parent = parent;
-        this.setIconImage(parent.getIconImage());
+        this.setIconImage(parent.getIcone());
         txtMaxRenovacoes.setText(String.valueOf(Sistema.getQtdRenovacoesPermitir()));
         txtValorMulta.setText(String.valueOf(Sistema.getValorMultaPorDia()));
         cb = new ConfigBanco(Conexao.getConexao());
@@ -131,7 +132,7 @@ public class TelaConfig extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        parent.enable(true);
+        parent.setEstadoAtivacao(true);
     }//GEN-LAST:event_formWindowClosing
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
