@@ -339,8 +339,8 @@ public class Bibliotecario extends javax.swing.JFrame implements Dependente, Par
     
     private void atualizar(){
         if(!txtCpf.getText().equals("") && !txtEmail.getText().equals("") && !txtNome.getText().equals("") && (rbNormal.isSelected() || rbAdmin.isSelected())){
-            if((!txtSenha.getText().equals("") && !txtSenhaConfirm.getText().equals("")) || (txtSenha.getText().equals("") && txtSenhaConfirm.getText().equals(""))){
-                if(txtSenha.getText().equals(txtSenhaConfirm.getText())){
+            if((!String.valueOf(txtSenha.getPassword()).equals("") && !String.valueOf(txtSenhaConfirm.getPassword()).equals("")) || (String.valueOf(txtSenha.getPassword()).equals("") && String.valueOf(txtSenhaConfirm.getPassword()).equals(""))){
+                if(String.valueOf(txtSenha.getPassword()).equals(String.valueOf(txtSenhaConfirm.getPassword()))){
                     boolean resu = cb.atualizarBibliotecario(Integer.parseInt(txtID.getText()), txtNome.getText(), txtCpf.getText(), tipo(), txtEmail.getText(), txtSenha.getText());
                     if(resu){
                         JOptionPane.showMessageDialog(null, "Atualização de dados realizada com sucesso!", "Atualização efetuada", JOptionPane.INFORMATION_MESSAGE);
@@ -354,7 +354,7 @@ public class Bibliotecario extends javax.swing.JFrame implements Dependente, Par
                     JOptionPane.showMessageDialog(null, "As senhas são incompatíveis!", "Senhas incompatíveis", JOptionPane.ERROR_MESSAGE);
                     txtSenha.requestFocus();
                 }
-            }else if((txtSenha.getText().equals("") && !txtSenhaConfirm.getText().equals("")) || (!txtSenha.getText().equals("") && txtSenhaConfirm.getText().equals(""))){
+            }else if((String.valueOf(txtSenha.getPassword()).equals("") && !String.valueOf(txtSenhaConfirm.getPassword()).equals("")) || (!String.valueOf(txtSenha.getPassword()).equals("") && String.valueOf(txtSenhaConfirm.getPassword()).equals(""))){
                 
                 JOptionPane.showMessageDialog(null, "Os dois campos de senha devem ser preenchidos!", "Campos vazios", JOptionPane.ERROR_MESSAGE);
                 txtSenha.requestFocus();
