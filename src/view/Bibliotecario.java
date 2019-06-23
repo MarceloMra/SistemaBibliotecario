@@ -385,7 +385,7 @@ public class Bibliotecario extends javax.swing.JFrame implements Dependente, Par
     }
     
     private void cadastrar(){
-        if(txtSenha.getPassword().equals(txtSenhaConfirm.getPassword())){
+        if(String.valueOf(txtSenha.getPassword()).equals(String.valueOf(txtSenhaConfirm.getPassword()))){
             if(!txtCpf.getText().equals("") && !txtEmail.getText().equals("") && !txtNome.getText().equals("") && (rbNormal.isSelected() || rbAdmin.isSelected())){
                 boolean res = cb.cadastrarBibliotecario(txtNome.getText(), txtCpf.getText(), tipo(),txtEmail.getText(), String.valueOf(txtSenha.getPassword()));
                 if(res){                    
